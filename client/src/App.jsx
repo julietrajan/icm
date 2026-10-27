@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import IncidentForm from './components/IncidentForm.jsx';
 import IncidentDetail from './components/IncidentDetail.jsx';
 import Modal from './components/Modal.jsx';
+import About from './components/About.jsx';
 import { formatDate, isActive, label, priorities, statuses } from './models/incident.js';
 import { incidentService } from './services/incidentService.js';
 import { downloadIncidentCsv } from './services/incidentCsv.js';
@@ -20,6 +21,19 @@ export default function App() {
   const [selected, setSelected] = useState(null);
   const [sort, setSort] = useState('updated');
   const [theme, setTheme] = useState(document.documentElement.dataset.theme);
+  const [path, setPath] = useState(window.location.pathname.replace(/\/+$/, '') || '/');
+
+  function navigate(nextPath) {
+    if (path === nextPath) return;
+    window.history.pushState({}, '', nextPath);
+    setPath(nextPath);
+  }
+
+  useEffect(() => {
+    const handlePopState = () => setPath(window.location.pathname.replace(/\/+$/, '') || '/');
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -31,7 +45,7 @@ export default function App() {
     } catch (exception) { setError(exception.message); }
     finally { setLoading(false); }
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { if (path !== '/about') load(); }, [load, path]);
   useEffect(() => {
     if (!notice) return;
     const timeout = setTimeout(() => setNotice(''), 5000);
@@ -85,12 +99,13 @@ export default function App() {
 
   return <div className="app-shell">
     <aside className="sidebar">
-      <a className="brand" href="./"><span className="brand-symbol">i</span><span>Incident<span className="brand-light">Desk</span><small>OPERATIONS WORKSPACE</small></span></a>
+      <a className="brand" href="/" onClick={(event) => { event.preventDefault(); navigate('/'); }}><span className="brand-symbol">i</span><span>Incident<span className="brand-light">Desk</span><small>OPERATIONS WORKSPACE</small></span></a>
       <p className="nav-label">WORKSPACE</p>
       <nav aria-label="Main navigation">
-        <button className={view === 'all' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('all')}><span className="nav-icon">#</span>All incidents<span className="nav-count">{incidents.length}</span></button>
-        <button className={view === 'active' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('active')}><span className="nav-icon">!</span>Active incidents<span className="nav-count">{active.length}</span></button>
-        <button className={view === 'resolved' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('resolved')}><span className="nav-icon">/</span>Resolved<span className="nav-count">{resolved.length}</span></button>
+        <button className={path !== '/about' && view === 'all' ? 'nav-item active' : 'nav-item'} onClick={() => { switchView('all'); navigate('/'); }}><span className="nav-icon">#</span>All incidents<span className="nav-count">{incidents.length}</span></button>
+        <button className={path !== '/about' && view === 'active' ? 'nav-item active' : 'nav-item'} onClick={() => { switchView('active'); navigate('/'); }}><span className="nav-icon">!</span>Active incidents<span className="nav-count">{active.length}</span></button>
+        <button className={path !== '/about' && view === 'resolved' ? 'nav-item active' : 'nav-item'} onClick={() => { switchView('resolved'); navigate('/'); }}><span className="nav-icon">/</span>Resolved<span className="nav-count">{resolved.length}</span></button>
+        <a className={path === '/about' ? 'nav-item active' : 'nav-item'} href="/about" onClick={(event) => { event.preventDefault(); navigate('/about'); }}><span className="nav-icon">i</span>About</a>
       </nav>
       <div className="storage-card"><span className="storage-dot" /><strong>Local file storage</strong><p>Your workspace, without a database. Changes are saved by the API.</p><code>Data/incidents.json</code></div>
       <div className="sidebar-footer">INCIDENT MANAGEMENT <span>v1.0</span></div>
@@ -99,6 +114,7 @@ export default function App() {
       <header className="topbar" aria-label="Application header"><div className="header-brand"><strong>IncidentDesk</strong><span>Incident management workspace</span></div>
         <button className="theme-button" onClick={() => { const next = theme === 'dark' ? 'light' : 'dark'; setTheme(next); document.documentElement.dataset.theme = next; }}>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</button></header>
       <main>
+        {path === '/about' ? <About /> : <>
         <div className="page-heading"><div><p className="eyebrow">SERVICE OPERATIONS</p><h1>Keep every incident in view.</h1><p className="muted">Track issues, coordinate your response, and get back to what matters.</p></div>
           <button className="primary new-button" onClick={openCreate}><span aria-hidden="true">+</span> New incident</button></div>
         {notice && <div className="notice" role="status">{notice}</div>}
@@ -125,6 +141,7 @@ export default function App() {
                   <td><button className="icon-button" aria-label={`View ${incident.number}`} onClick={() => { setSelected(incident); setError(''); setModal('detail'); }}>&#8594;</button></td></tr>)}</tbody></table></div>}
           <footer className="panel-footer"><span>{filtered.length} of {incidents.length} incidents</span><span>Stored locally. Ready when you are.</span></footer>
         </section>
+        </>}
       </main>
       <footer className="page-footer" aria-label="Application footer"><div><strong>IncidentDesk</strong><span>Built for calmer operations.</span></div><span>Local workspace / v1.0</span></footer>
     </div>
