@@ -10,6 +10,7 @@ builder.Services.AddSingleton<IIncidentService, JsonIncidentService>();
 var app = builder.Build();
 app.UseExceptionHandler();
 app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
 if (Directory.Exists(Path.Combine(app.Environment.ContentRootPath, "wwwroot")))
 {
