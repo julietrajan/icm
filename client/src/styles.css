@@ -82,6 +82,7 @@ h3 { font-size: 17px; }
 .nav-label { font-size: 10px; letter-spacing: 1.7px; font-weight: 700; color: var(--cp-text-soft); padding-left: 12px; margin-bottom: 12px; }
 nav { display: grid; gap: 8px; }
 .nav-item { border: 0; width: 100%; text-align: left; display: flex; gap: 12px; align-items: center; padding: 12px; background: var(--cp-bg-elevated); color: var(--cp-text-muted); font-size: 13px; }
+.nav-item { text-decoration: none; }
 .nav-item.active { background: var(--cp-accent-soft); color: var(--cp-accent); }
 .nav-icon { font-size: 18px; width: 16px; text-align: center; }
 .nav-count { margin-left: auto; font-size: 11px; background: var(--cp-surface); padding: 1px 7px; border-radius: 6px; }
@@ -113,6 +114,9 @@ main { flex: 1; width: 100%; max-width: 1600px; margin: 0 auto; padding: 40px; }
 .stat-card > strong { font-size: 36px; font-weight: 600; display: block; margin: 12px 0 4px; line-height: 1.2; letter-spacing: -1px; }
 .stat-card p { font-size: 11px; color: var(--cp-text-soft); }
 .incident-panel { border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); overflow: hidden; }
+.about-panel { max-width: 760px; padding: 32px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+.about-panel .muted { margin: 20px 0 4px; font-size: 12px; }
+.about-panel time { color: var(--cp-text-muted); font-size: 15px; }
 .panel-heading { padding: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .panel-heading p { font-size: 12px; margin-top: 4px; }
 .panel-heading button { font-size: 12px; }
@@ -204,7 +208,7 @@ dd { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
   .app-shell { display: block; }
   .sidebar { width: 100%; height: auto; position: static; padding: 20px; border-right: 0; border-bottom: 1px solid var(--cp-border); }
   .brand { margin: 0 0 20px; }
-  nav { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  nav { grid-template-columns: repeat(4, 1fr); gap: 4px; }
   .nav-label, .storage-card, .sidebar-footer, .nav-icon { display: none; }
   .nav-item { font-size: 11px; padding: 10px 8px; gap: 4px; }
   .topbar { min-height: 72px; padding: 12px 20px; font-size: 10px; }
