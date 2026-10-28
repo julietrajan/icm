@@ -3,4 +3,4 @@
 	Determine the root cause of the failure.
 	Identify the smallest appropriate change needed to resolve the failure.
 	Explain what caused the failure and why the proposed change resolves it.
-Keep the result reviewable by a human before changes are merged.
+	Keep the result reviewable by a human before changes are merged.
