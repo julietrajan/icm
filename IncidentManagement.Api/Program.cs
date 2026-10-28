@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using IncidentManagement.Api.Services;
 
 var demoMessage = "Incident Management Demo"        
+    
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false)));
