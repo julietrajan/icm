@@ -1,0 +1,25 @@
+name: Validate Incident Management App
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate-api:
+    name: Build .NET API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore IncidentManagement.sln
+
+      - name: Build application
+        run: dotnet build IncidentManagement.sln --configuration Release --no-restore
