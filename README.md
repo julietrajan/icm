@@ -3,6 +3,7 @@
 A small incident-management demo consisting of an ASP.NET Core API and a React
 web client. The API stores incidents in a local JSON file.
 
+
 > **Security notice:** This is an unauthenticated demo, not a production-ready
 > service. Anyone who can reach the API can read, create, change, and delete
 > incidents. Do not expose it to the public internet or use it for sensitive
