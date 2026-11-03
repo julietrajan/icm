@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Incident Management README.md
+=======
+# Incident Management
+>>>>>>> parent of 5b9e2ff (README updated)
 
 A small incident-management demo consisting of an ASP.NET Core API and a React
 web client. The API stores incidents in a local JSON file.
