@@ -1,0 +1,45 @@
+name: CodeQL Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze CSharp
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      packages: read
+      contents: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: csharp
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore IncidentManagement.Api/IncidentManagement.Api.csproj
+
+      - name: Build Application
+        run: dotnet build IncidentManagement.Api/IncidentManagement.Api.csproj --no-restore
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
