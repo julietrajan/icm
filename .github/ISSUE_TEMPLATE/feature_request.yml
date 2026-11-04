@@ -1,0 +1,84 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+title: "Feature Request"
+labels:
+  - enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature!
+        Please provide the details below.
+
+  - type: input
+    id: feature-name
+    attributes:
+      label: Feature Name
+      description: Give your feature a short and descriptive name.
+      placeholder: Example - Add severity filter to dashboard
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Opportunity
+      description: What problem would this feature solve?
+      placeholder: Describe the problem or opportunity.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe how you would like the feature to work.
+      placeholder: Explain your proposed solution.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which area of the application does this feature affect?
+      options:
+        - Dashboard
+        - Incident Management
+        - Reporting
+        - Notifications
+        - User Interface
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Expected Benefits
+      description: What benefits would this feature provide?
+      placeholder: Explain how users would benefit from this feature.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have checked that a similar feature request does not already exist.
+          required: true
+        - label: I have provided enough information to understand the requested feature.
+          required: true
