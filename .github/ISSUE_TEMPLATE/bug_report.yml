@@ -1,0 +1,71 @@
+name: Bug Report
+description: Report a problem with the application
+title: ""
+labels:
+  - bug
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please provide the details below.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Bug Summary
+      description: Briefly describe the problem.
+      placeholder: Dashboard is not loading
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe what happened.
+      placeholder: Explain the problem in detail.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Tell us how we can reproduce the issue.
+      placeholder: |
+        1. Open the application
+        2. Go to the dashboard
+        3. Click on Incidents
+        4. Observe the error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: Select the severity of the issue.
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
