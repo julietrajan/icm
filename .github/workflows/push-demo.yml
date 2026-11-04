@@ -1,0 +1,20 @@
+name: Push Demo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  show-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show Trigger Message
+        run: echo "A change was pushed to main!"
+
+      - name: Show Branch
+        run: echo "Branch is ${{ github.ref }}"
+
+      - name: Show Commit
+        run: echo "Commit is ${{ github.sha }}"
