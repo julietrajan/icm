@@ -156,6 +156,10 @@ unauthenticated; health routes are also public. The development UI's localhost
 binding and Vite proxy are for local use, not security boundaries. The
 development HTTPS profile is not a production TLS configuration.
 
+
+Testing GitHub Actions
+
+
 Before any non-local deployment, add and verify appropriate authentication,
 authorization, TLS termination, input/data protections, backups, monitoring,
 and production-grade persistent storage. Do not expose this demo directly to
