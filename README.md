@@ -27,17 +27,25 @@ web client. The API stores incidents in a local JSON file.
 Check the installed tools with `dotnet --version`, `node --version`, and
 `npm --version`.
 
-## Run locally
+## Local development
 
-From the repository root, restore and run the API in one terminal:
+The API project is `IncidentManagement.Api/IncidentManagement.Api.csproj` and
+requires the .NET 10 SDK. From the repository root, restore and build its
+dependencies:
 
 ```sh
-dotnet restore IncidentManagement.sln
-dotnet run --project IncidentManagement.Api --launch-profile http
+dotnet restore IncidentManagement.Api/IncidentManagement.Api.csproj
+dotnet build IncidentManagement.Api/IncidentManagement.Api.csproj
 ```
 
-The HTTP launch profile listens at `http://localhost:5051`. In another
-terminal, install the UI dependencies and start the development server:
+Run the API locally:
+
+```sh
+dotnet run --project IncidentManagement.Api/IncidentManagement.Api.csproj --launch-profile http
+```
+
+The HTTP launch profile listens at `http://localhost:5051`. In another terminal,
+install the UI dependencies and start the development server:
 
 ```sh
 cd client
