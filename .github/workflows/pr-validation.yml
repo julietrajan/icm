@@ -1,0 +1,26 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Validate .NET Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore IncidentManagement.Api/IncidentManagement.Api.csproj
+
+      - name: Build Application
+        run: dotnet build IncidentManagement.Api/IncidentManagement.Api.csproj --no-restore
