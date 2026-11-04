@@ -1,4 +1,4 @@
-using IncidentManagement.Api.Models;
+using IncidentManagement.Api.Models
 
 namespace IncidentManagement.Api.Services;
 
