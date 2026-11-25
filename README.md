@@ -251,6 +251,14 @@ Text fields are trimmed before validation. Creating an incident sets its status 
 
 Successful reads, updates, and note additions return **200 OK**. Creation returns **201 Created** with the incident and a `Location` header; deletion returns **204 No Content**. Invalid requests return **400 Bad Request**, missing incidents return **404 Not Found**, and stale updates or deletes return **409 Conflict**. After a conflict, reload the incident and reconcile changes before retrying with its current version. Persistent storage failures return **500 Internal Server Error**.
 
+### API rate limiting
+
+The incident endpoints and `/api/health` share a limit of 100 requests per 60-second fixed window per client IP address. Excess requests are rejected immediately with **429 Too Many Requests**; retry after the window resets. Static files are not limited. Configure positive `RateLimiting:PermitLimit` and `RateLimiting:WindowSeconds` values in `IncidentManagement.Api/appsettings.json` or through configuration overrides such as environment variables `RateLimiting__PermitLimit` and `RateLimiting__WindowSeconds`.
+
+The client IP is taken from the connection, not untrusted forwarding headers. Behind a reverse proxy, clients may therefore share the proxy's limit; only configure forwarded headers for known, trusted proxies. Counters are in memory per application instance, not shared across instances or restarts. This is not a substitute for authentication or DDoS protection. Load-test and adjust the limit for your deployment.
+
+The implementation follows Microsoft's [ASP.NET Core rate-limiting middleware guidance](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?view=aspnetcore-10.0): use a partitioned fixed-window policy, register `AddRateLimiter`, run `UseRateLimiter` after routing for endpoint policies, and load-test the chosen limits.
+
 ## Build and test
 
 Run these commands from the project root after installing the prerequisites and frontend dependencies. A **build** checks and prepares the code to run; **tests** automatically check expected behavior.
@@ -265,6 +273,7 @@ If the build succeeds, run the API and frontend tests:
 
 ```powershell
 node --test .\tests\api.test.mjs
+node --test .\tests\rateLimiting.test.mjs
 node --test .\tests\incidentCsv.test.mjs .\tests\incidentModel.test.mjs .\tests\incidentService.test.mjs .\tests\theme.test.mjs
 node --test .\tests\about.test.mjs
 ```
