@@ -1,6 +1,6 @@
 using IncidentManagement.Api.Models;
 using IncidentManagement.Api.Services;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc
 
 namespace IncidentManagement.Api.Controllers;
 
