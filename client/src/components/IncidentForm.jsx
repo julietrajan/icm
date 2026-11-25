@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { categories, emptyIncident, label, priorities, statuses } from '../models/incident.js';
+import { categories, emptyIncident, label, priorities, responseTarget, statuses } from '../models/incident.js';
 
 export default function IncidentForm({ incident, onSave, onCancel, busy }) {
   const [form, setForm] = useState(() => incident ? { ...incident } : emptyIncident());
@@ -19,7 +19,8 @@ export default function IncidentForm({ incident, onSave, onCancel, busy }) {
         <label>Description <span>*</span><textarea required minLength={5} maxLength={10000} rows={5}
           placeholder="What happened? Include the impact and steps to reproduce." {...field('description')} /></label>
         <div className="form-grid">
-          <label>Priority<select {...field('priority')}>{priorities.map((value) => <option key={value}>{value}</option>)}</select></label>
+          <label>Priority<select {...field('priority')}>{priorities.map((value) => <option key={value}>{value}</option>)}</select>
+            <small className="response-target" aria-live="polite">Response target: {responseTarget(form.priority)}</small></label>
           <label>Category<select {...field('category')}>{categories.map((value) => <option key={value}>{value}</option>)}</select></label>
           <label>Reported by <span>*</span><input required maxLength={100} placeholder="Your name" {...field('reportedBy')} /></label>
           <label>Assigned to<input maxLength={100} placeholder="Unassigned" {...field('assignedTo')} /></label>

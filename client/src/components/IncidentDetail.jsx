@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatDate, label } from '../models/incident.js';
+import { formatDate, label, responseTarget } from '../models/incident.js';
 
 export default function IncidentDetail({ incident, busy, onEdit, onDelete, onAddNote }) {
   const [author, setAuthor] = useState('');
@@ -15,6 +15,7 @@ export default function IncidentDetail({ incident, busy, onEdit, onDelete, onAdd
     <dl className="detail-grid">
       <div><dt>Reported by</dt><dd>{incident.reportedBy}</dd></div>
       <div><dt>Assigned to</dt><dd>{incident.assignedTo || 'Unassigned'}</dd></div>
+      <div><dt>Response target</dt><dd>{incident.responseTarget || responseTarget(incident.priority)}</dd></div>
       <div><dt>Created</dt><dd>{formatDate(incident.createdAt)}</dd></div>
       <div><dt>Last updated</dt><dd>{formatDate(incident.updatedAt)}</dd></div>
       {incident.resolvedAt && <div><dt>Resolved</dt><dd>{formatDate(incident.resolvedAt)}</dd></div>}
