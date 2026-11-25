@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+IncidentManagement.Api/wwwroot/
+IncidentManagement.Api/Data/*.tmp
+tests/.tmp/
+*.user
+*.log

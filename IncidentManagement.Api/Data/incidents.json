@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "nextIncidentNumber": 17,
+  "incidents": [
+    {
+      "id": "788a507f-6154-4ace-9d5c-47d0412c157e",
+      "number": "INC-00002",
+      "title": "Customer portal unavailable",
+      "description": "Customers receive a service unavailable error when opening the support portal. Investigate the application pool and restore access.",
+      "status": "InProgress",
+      "priority": "Critical",
+      "category": "Application",
+      "reportedBy": "Priya Sharma",
+      "assignedTo": "Application Support",
+      "createdAt": "2026-10-20T21:16:37.7434731+00:00",
+      "updatedAt": "2026-10-20T21:16:37.991495+00:00",
+      "resolvedAt": null,
+      "version": 2,
+      "notes": []
+    },
+    {
+      "id": "74782078-d071-4c60-969e-53f34b94178f",
+      "number": "INC-00003",
+      "title": "Branch office router offline",
+      "description": "The branch router is not responding and office users cannot reach internal services. Check power, uplink connectivity, and router health.",
+      "status": "New",
+      "priority": "Critical",
+      "category": "Network",
+      "reportedBy": "Daniel Wilson",
+      "assignedTo": "Network Operations",
+      "createdAt": "2026-10-20T21:16:38.0802048+00:00",
+      "updatedAt": "2026-10-20T21:16:38.0802048+00:00",
+      "resolvedAt": null,
+      "version": 1,
+      "notes": []
+    },
+    {
+      "id": "4e7bd717-7c72-4389-946b-58a3005e4585",
+      "number": "INC-00004",
+      "title": "Suspicious sign-in alerts for finance accounts",
+      "description": "Several finance accounts triggered unusual sign-in alerts. Review sign-in activity and confirm whether account containment is required.",
+      "status": "InProgress",
+      "priority": "High",
+      "category": "Security",
+      "reportedBy": "Aisha Khan",
+      "assignedTo": "Security Operations",
+      "createdAt": "2026-10-20T21:16:38.1156659+00:00",
+      "updatedAt": "2026-10-20T21:16:38.1518368+00:00",
+      "resolvedAt": null,
+      "version": 2,
+      "notes": []
+    },
+    {
+      "id": "2b4738a5-3d72-47bf-989e-e35037595faf",
+      "number": "INC-00005",
+      "title": "Laptop battery no longer charging",
+      "description": "A service desk laptop stops charging when connected to its power adapter. Replacement battery availability is being checked.",
+      "status": "OnHold",
+      "priority": "Medium",
+      "category": "Hardware",
+      "reportedBy": "James Carter",
+      "assignedTo": "Desktop Support",
+      "createdAt": "2026-10-20T21:16:38.1903087+00:00",
+      "updatedAt": "2026-10-20T21:16:38.2299708+00:00",
+      "resolvedAt": null,
+      "version": 2,
+      "notes": []
+    },
+    {
+      "id": "6a9ef495-c327-431e-817e-b6730011c260",
+      "number": "INC-00006",
+      "title": "New starter cannot access project workspace",
+      "description": "A new employee cannot open the project workspace despite completing onboarding. Verify group membership and workspace permissions.",
+      "status": "New",
+      "priority": "High",
+      "category": "Access",
+      "reportedBy": "Mei Chen",
+      "assignedTo": "Identity Support",
+      "createdAt": "2026-10-20T21:16:38.2682614+00:00",
+      "updatedAt": "2026-10-20T21:16:38.2682614+00:00",
+      "resolvedAt": null,
+      "version": 1,
+      "notes": []
+    },
+    {
+      "id": "a38e664f-b5c6-446e-98d3-da30d0a3e466",
+      "number": "INC-00007",
+      "title": "Meeting room display instructions outdated",
+      "description": "The printed connection instructions in meeting room Cedar refer to the previous wireless display system. Update the room guidance.",
+      "status": "New",
+      "priority": "Low",
+      "category": "Other",
+      "reportedBy": "Sophie Martin",
+      "assignedTo": "Workplace Services",
+      "createdAt": "2026-10-20T21:16:38.3127568+00:00",
+      "updatedAt": "2026-10-20T21:16:38.3127568+00:00",
+      "resolvedAt": null,
+      "version": 1,
+      "notes": []
+    },
+    {
+      "id": "9dc44423-a7e8-4016-bf50-9630008f8e7f",
+      "number": "INC-00008",
+      "title": "Expense application export fails",
+      "description": "Exporting a monthly expense report produces an empty file. Review export logs and test reports containing multiple cost centers.",
+      "status": "InProgress",
+      "priority": "Medium",
+      "category": "Application",
+      "reportedBy": "Ravi Patel",
+      "assignedTo": "Application Support",
+      "createdAt": "2026-10-20T21:16:38.3575571+00:00",
+      "updatedAt": "2026-10-20T21:16:38.4085759+00:00",
+      "resolvedAt": null,
+      "version": 2,
+      "notes": []
+    },
+    {
+      "id": "7230f3da-fff3-4615-bcf5-54096e98b534",
+      "number": "INC-00009",
+      "title": "Intermittent guest Wi-Fi connection",
+      "description": "Visitors report intermittent guest wireless disconnections near reception. Review access point health and wireless channel utilization.",
+      "status": "OnHold",
+      "priority": "Low",
+      "category": "Network",
+      "reportedBy": "Olivia Brown",
+      "assignedTo": "Network Operations",
+      "createdAt": "2026-10-20T21:16:38.4520118+00:00",
+      "updatedAt": "2026-10-20T21:16:38.5002696+00:00",
+      "resolvedAt": null,
+      "version": 2,
+      "notes": []
+    },
+    {
+      "id": "f2020f7f-2525-45e2-a5a0-d47e65fe9e68",
+      "number": "INC-00010",
+      "title": "Reception printer paper feed error",
+      "description": "The reception printer repeatedly reports a paper feed fault. Cleaning and roller replacement restored normal printing.",
+      "status": "Resolved",
+      "priority": "Medium",
+      "category": "Hardware",
+      "reportedBy": "Noah Taylor",
+      "assignedTo": "Desktop Support",
+      "createdAt": "2026-10-20T21:16:38.5500414+00:00",
+      "updatedAt": "2026-10-20T21:16:38.6537898+00:00",
+      "resolvedAt": "2026-10-20T21:16:38.6537898+00:00",
+      "version": 3,
+      "notes": [
+        {
+          "id": "50f5b48d-8134-49a7-837d-2598cdabd83a",
+          "author": "Desktop Support",
+          "text": "Cleaned the paper path, replaced the pickup roller, and confirmed successful printing with a ten-page test.",
+          "createdAt": "2026-10-20T21:16:38.6012244+00:00"
+        }
+      ]
+    },
+    {
+      "id": "e3facb38-8718-4578-b59b-dc5d037da24a",
+      "number": "INC-00011",
+      "title": "Shared mailbox permission missing",
+      "description": "The customer service team could not open its shared mailbox. Restored the approved mailbox permissions and verified access.",
+      "status": "Resolved",
+      "priority": "High",
+      "category": "Access",
+      "reportedBy": "Emma Davis",
+      "assignedTo": "Identity Support",
+      "createdAt": "2026-10-20T21:16:38.7039482+00:00",
+      "updatedAt": "2026-10-20T21:16:38.8012544+00:00",
+      "resolvedAt": "2026-10-20T21:16:38.8012544+00:00",
+      "version": 3,
+      "notes": [
+        {
+          "id": "0b31a928-ef79-4444-b8a5-7da266909a17",
+          "author": "Identity Support",
+          "text": "Reapplied approved mailbox membership and verified access with the affected team.",
+          "createdAt": "2026-10-20T21:16:38.7519017+00:00"
+        }
+      ]
+    },
+    {
+      "id": "a37ae717-a800-4974-b140-0ca6f7be4535",
+      "number": "INC-00012",
+      "title": "Payroll application login failure",
+      "description": "Payroll users could not sign in following a configuration update. Reverted the invalid authentication setting and verified sign-in.",
+      "status": "Resolved",
+      "priority": "Critical",
+      "category": "Application",
+      "reportedBy": "Liam Anderson",
+      "assignedTo": "Application Support",
+      "createdAt": "2026-10-20T21:16:38.8475024+00:00",
+      "updatedAt": "2026-10-20T21:16:38.9399351+00:00",
+      "resolvedAt": "2026-10-20T21:16:38.9399351+00:00",
+      "version": 3,
+      "notes": [
+        {
+          "id": "50ffed46-bf34-4cda-95e4-a16ff0650d82",
+          "author": "Application Support",
+          "text": "Reverted the incorrect authentication configuration and confirmed successful sign-in with payroll users.",
+          "createdAt": "2026-10-20T21:16:38.891673+00:00"
+        }
+      ]
+    },
+    {
+      "id": "b2190db6-390a-425b-9384-05759789098e",
+      "number": "INC-00013",
+      "title": "VPN tunnel unavailable after gateway restart",
+      "description": "Remote staff could not connect after the VPN gateway restarted. Restored the tunnel configuration and confirmed stable remote access.",
+      "status": "Resolved",
+      "priority": "High",
+      "category": "Network",
+      "reportedBy": "Isabella Thomas",
+      "assignedTo": "Network Operations",
+      "createdAt": "2026-10-20T21:16:38.9885741+00:00",
+      "updatedAt": "2026-10-20T21:16:39.1188124+00:00",
+      "resolvedAt": "2026-10-20T21:16:39.1188124+00:00",
+      "version": 3,
+      "notes": [
+        {
+          "id": "552f6f9f-02ac-4032-8eef-8ef24e23be92",
+          "author": "Network Operations",
+          "text": "Restored the tunnel configuration and verified connectivity from two remote test clients.",
+          "createdAt": "2026-10-20T21:16:39.0335382+00:00"
+        }
+      ]
+    },
+    {
+      "id": "7e59c004-11b7-4697-b413-4a83600dff85",
+      "number": "INC-00014",
+      "title": "Endpoint protection signatures out of date",
+      "description": "An engineering workstation failed to receive protection signature updates. Repaired the update service and verified current signatures.",
+      "status": "Resolved",
+      "priority": "Medium",
+      "category": "Security",
+      "reportedBy": "Lucas Moore",
+      "assignedTo": "Security Operations",
+      "createdAt": "2026-10-20T21:16:39.1861579+00:00",
+      "updatedAt": "2026-10-20T21:16:39.3061415+00:00",
+      "resolvedAt": "2026-10-20T21:16:39.3061415+00:00",
+      "version": 3,
+      "notes": [
+        {
+          "id": "02805f0d-7a80-47b6-a225-0ad389906183",
+          "author": "Security Operations",
+          "text": "Repaired the endpoint update service, applied current signatures, and completed a successful health check.",
+          "createdAt": "2026-10-20T21:16:39.2517856+00:00"
+        }
+      ]
+    },
+    {
+      "id": "a2fac35b-5f3f-49f4-bd18-23131154780b",
+      "number": "INC-00015",
+      "title": "Service desk contact details incorrect",
+      "description": "The internal help page listed an outdated service desk extension. Updated the contact details and checked the published page.",
+      "status": "Resolved",
+      "priority": "Low",
+      "category": "Other",
+      "reportedBy": "Amelia Jackson",
+      "assignedTo": "Workplace Services",
+      "createdAt": "2026-10-20T21:16:39.3673884+00:00",
+      "updatedAt": "2026-10-20T21:16:39.4793744+00:00",
+      "resolvedAt": "2026-10-20T21:16:39.4793744+00:00",
+      "version": 3,
+      "notes": [
+        {
+          "id": "00194dc0-fbb8-472f-8a21-cf8266b710e5",
+          "author": "Workplace Services",
+          "text": "Published the correct extension and support hours and verified the updated help page.",
+          "createdAt": "2026-10-20T21:16:39.4201196+00:00"
+        }
+      ]
+    },
+    {
+      "id": "71cc23f4-0130-41c9-8733-cde815bd5071",
+      "number": "INC-00016",
+      "title": "Conference room camera not detected",
+      "description": "The video conferencing application does not detect the camera in meeting room Maple. Check the USB connection and device drivers.",
+      "status": "New",
+      "priority": "Medium",
+      "category": "Hardware",
+      "reportedBy": "Ethan White",
+      "assignedTo": "Desktop Support",
+      "createdAt": "2026-10-20T21:16:39.5462155+00:00",
+      "updatedAt": "2026-10-20T21:16:39.5462155+00:00",
+      "resolvedAt": null,
+      "version": 1,
+      "notes": []
+    }
+  ]
+}
