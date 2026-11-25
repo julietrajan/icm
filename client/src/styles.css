@@ -79,7 +79,8 @@ h3 { font-size: 17px; }
 .brand small { display: block; font-size: 8px; letter-spacing: 1.7px; color: var(--cp-text-muted); margin-top: 1px; }
 .nav-label { font-size: 10px; letter-spacing: 1.7px; font-weight: 700; color: var(--cp-text-soft); padding-left: 12px; margin-bottom: 12px; }
 nav { display: grid; gap: 8px; }
-.nav-item { border: 0; width: 100%; text-align: left; display: flex; gap: 12px; align-items: center; padding: 12px; background: var(--cp-bg-elevated); color: var(--cp-text-muted); font-size: 13px; }
+.nav-item { border: 0; border-radius: 0.625rem; width: 100%; text-align: left; text-decoration: none; display: flex; gap: 12px; align-items: center; padding: 12px; background: var(--cp-bg-elevated); color: var(--cp-text-muted); font-size: 13px; font-weight: 600; }
+.nav-item:hover { background: var(--cp-surface-soft); }
 .nav-item.active { background: var(--cp-accent-soft); color: var(--cp-accent); }
 .nav-icon { font-size: 18px; width: 16px; text-align: center; }
 .nav-count { margin-left: auto; font-size: 11px; background: var(--cp-surface); padding: 1px 7px; border-radius: 6px; }

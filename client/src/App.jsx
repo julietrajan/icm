@@ -2,11 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import IncidentForm from './components/IncidentForm.jsx';
 import IncidentDetail from './components/IncidentDetail.jsx';
 import Modal from './components/Modal.jsx';
+import About from './components/About.jsx';
 import { formatDate, isActive, isOverdue, label, priorities, statuses } from './models/incident.js';
 import { incidentService } from './services/incidentService.js';
 import { downloadIncidentCsv } from './services/incidentCsv.js';
 
 export default function App() {
+  const [pathname, setPathname] = useState(window.location.pathname);
+  const isAbout = pathname === '/about' || pathname === '/about/';
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -32,7 +35,12 @@ export default function App() {
     } catch (exception) { setError(exception.message); }
     finally { setLoading(false); }
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { if (!isAbout) load(); }, [load, isAbout]);
+  useEffect(() => {
+    const onPopState = () => { setPathname(window.location.pathname); setModal(null); };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 60 * 1000);
     return () => clearInterval(interval);
@@ -84,18 +92,28 @@ export default function App() {
     } catch (exception) { setError(exception.message); return false; }
     finally { setBusy(false); }
   }
-  const switchView = (next) => { setView(next); setStatus(''); setPriority(''); setQuery(''); };
+  function navigate(path) {
+    if (window.location.pathname !== path) window.history.pushState(null, '', path);
+    setPathname(path);
+    setModal(null);
+  }
+  const switchView = (next) => { if (isAbout) navigate('/'); setView(next); setStatus(''); setPriority(''); setQuery(''); };
   const title = view === 'active' ? 'Active incidents' : view === 'resolved' ? 'Resolved incidents' : 'All incidents';
   const modalTitle = modal === 'create' ? 'Create incident' : modal === 'edit' ? 'Edit incident' : modal === 'delete' ? 'Delete incident?' : selected?.title;
 
   return <div className="app-shell">
     <aside className="sidebar">
-      <a className="brand" href="./"><span className="brand-symbol">i</span><span>Incident<span className="brand-light">Desk</span><small>OPERATIONS WORKSPACE</small></span></a>
+      <a className="brand" href="/"><span className="brand-symbol">i</span><span>Incident<span className="brand-light">Desk</span><small>OPERATIONS WORKSPACE</small></span></a>
       <p className="nav-label">WORKSPACE</p>
       <nav aria-label="Main navigation">
-        <button className={view === 'all' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('all')}><span className="nav-icon">#</span>All incidents<span className="nav-count">{incidents.length}</span></button>
-        <button className={view === 'active' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('active')}><span className="nav-icon">!</span>Active incidents<span className="nav-count">{active.length}</span></button>
-        <button className={view === 'resolved' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('resolved')}><span className="nav-icon">/</span>Resolved<span className="nav-count">{resolved.length}</span></button>
+        <button className={!isAbout && view === 'all' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('all')}><span className="nav-icon">#</span>All incidents<span className="nav-count">{incidents.length}</span></button>
+        <button className={!isAbout && view === 'active' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('active')}><span className="nav-icon">!</span>Active incidents<span className="nav-count">{active.length}</span></button>
+        <button className={!isAbout && view === 'resolved' ? 'nav-item active' : 'nav-item'} onClick={() => switchView('resolved')}><span className="nav-icon">/</span>Resolved<span className="nav-count">{resolved.length}</span></button>
+        <a className={isAbout ? 'nav-item active' : 'nav-item'} href="/about" aria-current={isAbout ? 'page' : undefined} onClick={(event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          navigate('/about');
+        }}><span className="nav-icon" aria-hidden="true">i</span>About</a>
       </nav>
       <div className="storage-card"><span className="storage-dot" /><strong>Local file storage</strong><p>Your workspace, without a database. Changes are saved by the API.</p><code>Data/incidents.json</code></div>
       <div className="sidebar-footer">INCIDENT MANAGEMENT <span>v1.0</span></div>
@@ -104,6 +122,7 @@ export default function App() {
       <header className="topbar" aria-label="Application header"><div className="header-brand"><strong>IncidentDesk</strong><span>Incident management workspace</span></div>
         <button className="theme-button" onClick={() => { const next = theme === 'dark' ? 'light' : 'dark'; setTheme(next); document.documentElement.dataset.theme = next; }}>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</button></header>
       <main>
+        {isAbout ? <About now={now} /> : <>
         <div className="page-heading"><div><p className="eyebrow">SERVICE OPERATIONS</p><h1>Keep every incident in view.</h1><p className="muted">Track issues, coordinate your response, and get back to what matters.</p></div>
           <button className="primary new-button" onClick={openCreate}><span aria-hidden="true">+</span> New incident</button></div>
         {notice && <div className="notice" role="status">{notice}</div>}
@@ -133,6 +152,7 @@ export default function App() {
                 })}</tbody></table></div>}
           <footer className="panel-footer"><span>{filtered.length} of {incidents.length} incidents</span><span>Stored locally. Ready when you are.</span></footer>
         </section>
+        </>}
       </main>
       <footer className="page-footer" aria-label="Application footer"><div><strong>IncidentDesk</strong><span>Built for calmer operations.</span></div><span>Local workspace / v1.0</span></footer>
     </div>
