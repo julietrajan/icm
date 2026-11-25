@@ -18,6 +18,7 @@ The app has two parts: a **React 19 frontend** (the interface you open in your b
 - Export matching incidents to CSV in the displayed sort order.
 - Timestamped incident notes and resolution/reopening timestamps.
 - Responsive layout, accessible native dialogs, and blue-accented light/dark themes.
+- About page at `/about` with the "GitHub Copilot Demo" title and current local date.
 - Server-side validation and explicit API/UI error reporting.
 - Protection against overwriting someone else's changes: outdated edits and deletes are rejected.
 - Local JSON-file storage; records remain available after restarting the app.
@@ -105,6 +106,8 @@ In the incident list, active incidents (New, In progress, or On hold) show an **
 
 Use **Light mode** / **Dark mode** in the header to switch themes. The initial theme follows your system preference unless the URL includes `?scoutTheme=light` or `?scoutTheme=dark`. Switching themes with the button does not save your preference across reloads.
 
+Select **About** in the sidebar or open `/about` directly to see **GitHub Copilot Demo** and the current date in your browser's locale and time zone. The date updates once a minute while the page is open.
+
 ## Troubleshooting
 
 | Problem | What to do |
@@ -144,6 +147,7 @@ client\
     App.jsx          Dashboard and application state
     styles.css       Responsive layout and blue light/dark theme palettes
 tests\
+  about.test.mjs     About title, local date, and midnight rollover tests
   api.test.mjs       Real HTTP integration tests using Node's built-in test runner
   incidentCsv.test.mjs CSV formatting and spreadsheet-safety tests
   incidentModel.test.mjs UI model defaults, labels, and constants tests
@@ -260,6 +264,7 @@ If the build succeeds, run the API and frontend tests:
 ```powershell
 node --test .\tests\api.test.mjs
 node --test .\tests\incidentCsv.test.mjs .\tests\incidentModel.test.mjs .\tests\incidentService.test.mjs .\tests\theme.test.mjs
+node --test .\tests\about.test.mjs
 ```
 
 Build the frontend into `client\dist`:
