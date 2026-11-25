@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IncidentManagement.Api.Controllers;
 
-[ApiC
+[ApiController]
 [Route("api/incidents")]
 public sealed class IncidentsController(IIncidentService service) : ControllerBase
 {
