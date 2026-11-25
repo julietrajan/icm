@@ -3,6 +3,7 @@ import IncidentForm from './components/IncidentForm.jsx';
 import IncidentDetail from './components/IncidentDetail.jsx';
 import Modal from './components/Modal.jsx';
 import About from './components/About.jsx';
+import InfoTooltip from './components/InfoTooltip.jsx';
 import { formatDate, isActive, isOverdue, label, priorities, statuses } from './models/incident.js';
 import { incidentService } from './services/incidentService.js';
 import { downloadIncidentCsv } from './services/incidentCsv.js';
@@ -128,8 +129,8 @@ export default function App() {
         {notice && <div className="notice" role="status">{notice}</div>}
         {error && !modal && <div className="error" role="alert">{error}<button onClick={load}>Retry</button></div>}
         <section className="stats" aria-label="Incident overview">
-          {[['Total incidents', incidents.length, 'Every issue, one place', 'total'], ['Active incidents', active.length, 'Awaiting a resolution', 'active'], ['Critical incidents', critical.length, 'Active and highest priority', 'critical'], ['Resolved & closed', resolved.length, 'Back on track', 'resolved']].map(([name, count, caption, type]) =>
-            <article className={`stat-card stat-${type}`} key={name}><div className="stat-label">{name}<span className="stat-dot" /></div><strong>{loading ? '--' : count}</strong><p>{caption}</p></article>)}
+          {[['Total incidents', incidents.length, 'Every issue, one place', 'total', 'All incidents currently stored in the workspace.'], ['Active incidents', active.length, 'Awaiting a resolution', 'active', 'Incidents that are not yet resolved or closed.'], ['Critical incidents', critical.length, 'Active and highest priority', 'critical', 'Active incidents with Critical priority.'], ['Resolved & closed', resolved.length, 'Back on track', 'resolved', 'Incidents that have been resolved or closed.']].map(([name, count, caption, type, description]) =>
+            <article className={`stat-card stat-${type}`} key={name}><div className="stat-label"><span className="stat-title">{name}<InfoTooltip label={name}>{description}</InfoTooltip></span><span className="stat-dot" /></div><strong>{loading ? '--' : count}</strong><p>{caption}</p></article>)}
         </section>
         <section className="incident-panel">
           <header className="panel-heading"><div><h2>{title} <span className="count">{filtered.length}</span></h2><p className="muted">A clear picture of your service operations.</p></div><div className="panel-actions"><button onClick={exportCsv} disabled={loading || busy || !filtered.length}>Export CSV</button><button onClick={load} disabled={loading || busy}>{loading ? 'Refreshing...' : 'Refresh'}</button></div></header>

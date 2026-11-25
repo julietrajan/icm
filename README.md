@@ -10,7 +10,7 @@ The app has two parts: a **React 19 frontend** (the interface you open in your b
 
 ## Features
 
-- Dashboard counts for total, active, critical, and resolved incidents.
+- Dashboard counts for total, active, critical, and resolved incidents, with informational tooltips.
 - Create, view, edit, and delete incidents with confirmation.
 - Priority, category, reporter, assignee, and status tracking.
 - Search, status/priority filters, sorting, and active/resolved views.
@@ -101,6 +101,8 @@ The app loads records from `IncidentManagement.Api\Data\incidents.json`, so you 
 5. Use search and filters to find records, or **Export CSV** to download the matching incidents for a spreadsheet.
 
 Resolved and closed incidents no longer count as active. The dashboard summarizes total, active, critical, and resolved incidents.
+
+Hover over the information icon beside a dashboard card title, or use **Tab** to focus it, to learn what the count represents. Press **Escape** to dismiss the tooltip, or move the pointer and keyboard focus away.
 
 In the incident list, active incidents (New, In progress, or On hold) show an **Overdue** badge beside a red **Updated** timestamp after 24 hours without an update. Resolved and closed incidents are never marked overdue. The indicator checks the time once a minute while the page is open; it does not change incident data or fetch updates from the API. Use **Refresh** to load changes made elsewhere.
 

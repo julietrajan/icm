@@ -103,8 +103,14 @@ main { flex: 1; width: 100%; max-width: 1600px; margin: 0 auto; padding: 40px; }
 .new-button { white-space: nowrap; padding: 11px 18px; font-size: 12px; }
 .new-button span { font-size: 18px; margin-right: 6px; }
 .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 32px; }
-.stat-card { background: var(--cp-surface); padding: 20px 24px; border: 1px solid var(--cp-border); border-radius: 16px; }
+.stat-card { position: relative; background: var(--cp-surface); padding: 20px 24px; border: 1px solid var(--cp-border); border-radius: 16px; }
 .stat-label { display: flex; align-items: center; justify-content: space-between; color: var(--cp-text-muted); font-size: 12px; }
+.stat-title { display: inline-flex; align-items: center; gap: 6px; }
+.info-tooltip { display: inline-flex; flex-shrink: 0; }
+.info-button { display: inline-grid; place-items: center; width: 16px; height: 16px; padding: 0; border: 1px solid var(--cp-text-soft); border-radius: 50%; background: transparent; color: var(--cp-text-muted); font-size: 11px; line-height: 1; }
+.info-tooltip-text { position: absolute; z-index: 2; top: 38px; left: 12px; right: 12px; padding-top: 8px; visibility: hidden; }
+.info-tooltip-text > span { display: block; padding: 10px 12px; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-bg-elevated); color: var(--cp-text); box-shadow: var(--cp-shadow); font-size: 12px; font-weight: 400; }
+.info-tooltip:hover .info-tooltip-text, .info-tooltip:focus-within .info-tooltip-text { visibility: visible; }
 .stat-dot { margin: 0; background: var(--cp-text-soft); }
 .stat-active .stat-dot { background: var(--cp-warning); }
 .stat-critical .stat-dot { background: var(--cp-danger); }
