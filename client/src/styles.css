@@ -177,6 +177,7 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 form label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
 form label > span { color: var(--cp-accent); }
 form label input, form label textarea, form label select { display: block; width: 100%; margin-top: 6px; font-size: 13px; font-weight: 400; }
+.response-target { display: block; margin-top: 6px; color: var(--cp-text-muted); font-weight: 400; }
 .form-grid, .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 .form-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 20px; border-top: 1px solid var(--cp-border); }
 .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }

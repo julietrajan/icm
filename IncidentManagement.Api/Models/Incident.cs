@@ -6,6 +6,18 @@ public enum IncidentStatus { New, InProgress, OnHold, Resolved, Closed }
 public enum IncidentPriority { Critical, High, Medium, Low }
 public enum IncidentCategory { Application, Hardware, Network, Security, Access, Other }
 
+public static class IncidentResponseTargets
+{
+    public static string For(IncidentPriority priority) => priority switch
+    {
+        IncidentPriority.Critical => "15 minutes",
+        IncidentPriority.High => "30 minutes",
+        IncidentPriority.Medium => "4 hours",
+        IncidentPriority.Low => "1 business day",
+        _ => throw new ArgumentOutOfRangeException(nameof(priority), priority, "Unsupported incident priority.")
+    };
+}
+
 public sealed record Incident
 {
     public Guid Id { get; init; }
@@ -14,6 +26,7 @@ public sealed record Incident
     public string Description { get; init; } = "";
     public IncidentStatus Status { get; init; }
     public IncidentPriority Priority { get; init; }
+    public string ResponseTarget { get; init; } = "";
     public IncidentCategory Category { get; init; }
     public string ReportedBy { get; init; } = "";
     public string AssignedTo { get; init; } = "";

@@ -1,8 +1,21 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isOverdue } from '../client/src/models/incident.js';
+import { isOverdue, priorities, responseTarget } from '../client/src/models/incident.js';
 
 const now = Date.parse('2026-11-25T12:00:00Z');
+
+test('every priority has its required response target', () => {
+  const expected = {
+    Critical: '15 minutes',
+    High: '30 minutes',
+    Medium: '4 hours',
+    Low: '1 business day',
+  };
+  for (const priority of priorities) {
+    assert.equal(responseTarget(priority), expected[priority], priority);
+  }
+  assert.equal(responseTarget('Unknown'), '');
+});
 
 test('active incidents become overdue at exactly 24 hours since their last update', () => {
   for (const status of ['New', 'InProgress', 'OnHold']) {
