@@ -33,7 +33,7 @@ Install these tools before starting:
 | [Node.js](https://nodejs.org/en/download) | Node.js **22.12 or later in the 22.x series**, or another Vite 7-compatible version | Runs the frontend tools; includes **npm**, the package manager that downloads JavaScript dependencies |
 | Editor (optional) | [Visual Studio Code](https://code.visualstudio.com/) | Lets you edit files and open terminals in one place |
 
-Open a PowerShell terminal and check that the required tools are available:
+Open a terminal and check that the required tools are available. These commands work in PowerShell, Bash, and zsh:
 
 ```powershell
 dotnet --version
@@ -45,20 +45,22 @@ The commands should print version numbers, including `10.x` for the .NET SDK and
 
 ## Run locally
 
-These examples use **Windows PowerShell**. Copy only the commands inside each code block.
+The commands below are shown for **Windows PowerShell** and **Bash/zsh**. Start each terminal in the project root: the folder containing `IncidentManagement.sln`, `IncidentManagement.Api`, and `client`. Unless a step says otherwise, run commands from that folder on every platform.
 
 ### 1. Open the project folder
 
 Clone the repository using Git, or download and extract its ZIP from GitHub. Open the resulting folder in your editor.
 
-Open a terminal in the **project root**: the folder containing `IncidentManagement.sln`, `IncidentManagement.Api`, and `client`. In VS Code, use **Terminal > New Terminal**.
-
-Unless a step says otherwise, run the commands below from that folder.
+Open a terminal in the project root. In VS Code, use **Terminal > New Terminal**.
 
 ### 2. Start the backend (terminal 1)
 
 ```powershell
 dotnet run --project .\IncidentManagement.Api --launch-profile http
+```
+
+```bash
+dotnet run --project ./IncidentManagement.Api --launch-profile http
 ```
 
 The first run restores .NET dependencies and builds the API, which may take a little longer. Wait for output showing that the service is listening on **http://localhost:5051**.
@@ -72,6 +74,11 @@ Open a **second terminal in the project root**, keeping the first one running:
 ```powershell
 npm --prefix .\client install
 npm --prefix .\client run dev
+```
+
+```bash
+npm --prefix ./client install
+npm --prefix ./client run dev
 ```
 
 `npm install` downloads the frontend dependencies. You need it on the first run and after dependency changes; on later runs, just use `npm --prefix .\client run dev`.
@@ -126,7 +133,13 @@ To check whether the backend is responding, run this in another PowerShell termi
 Invoke-RestMethod http://localhost:5051/api/health
 ```
 
-The response contains `status: healthy`. This checks only that the backend is running, not that the incident data file can be read.
+In Bash/zsh, use:
+
+```bash
+curl --fail http://localhost:5051/api/health
+```
+
+The response contains `status: healthy`. This checks only that the backend process is running; it does **not** check that the incident data file can be read or is ready. To check storage, request the data (for example, open `http://localhost:5051/api/incidents` while the API is running) and check for a successful response.
 
 ## Project structure
 
@@ -148,11 +161,7 @@ client\
     styles.css       Responsive layout and blue light/dark theme palettes
 tests\
   about.test.mjs     About title, local date, and midnight rollover tests
-  api.test.mjs       Real HTTP integration tests using Node's built-in test runner
-  incidentCsv.test.mjs CSV formatting and spreadsheet-safety tests
-  incidentModel.test.mjs UI model defaults, labels, and constants tests
-  incidentService.test.mjs API client tests with mocked fetch
-  theme.test.mjs     Theme palette and contrast checks
+  incidentModel.test.mjs Active-incident overdue behavior tests
 ```
 
 ## Export incidents
@@ -167,7 +176,147 @@ Files use UTF-8 with a BOM, quoted comma-separated fields, and CRLF record separ
 
 ## Data storage
 
-Data is saved to `IncidentManagement.Api\Data\incidents.json`, relative to the API content root, not the shell's current directory. The file includes a schema version, the next incident number, incidents, and notes. Back it up before modifying it manually. Do not edit it while the API is running.
+Data is saved to `IncidentManagement.Api\Data\incidents.json`, relative to the API content root (`IncidentManagement.Api`), not the shell's current directory. This is true on Windows, Linux, and macOS, regardless of the terminal's working directory. `Storage__FilePath` can be an absolute path or a path relative to that same content root; prefer an absolute path for overrides. The file includes a schema version, the next incident number, incidents, and notes.
+
+### Back up and restore safely
+
+The API is the **sole writer** for a store. Stop it with **Ctrl+C** before copying, validating, restoring, or manually inspecting its file; never copy a changing store and assume the result is consistent. Keep backups in a separate, access-controlled location outside the repository and outside public or synced folders; on Windows, use a folder whose access-control list restricts access to authorized users. Backups contain incident content: do not commit them, upload them publicly, or leave them in a shared location. Process health (`/api/health`) is not storage readiness; check `/api/incidents` for a successful data read after starting or restoring.
+
+From the project root, the default store is:
+
+```text
+IncidentManagement.Api/Data/incidents.json
+```
+
+For an override, use the actual value of `Storage__FilePath` instead. Make a timestamped backup only after stopping the API. Example commands follow; replace the example backup directory with a protected location you control.
+
+PowerShell:
+
+```powershell
+$Store = (Resolve-Path .\IncidentManagement.Api\Data\incidents.json).Path
+$BackupDir = "$HOME\IncidentDesk-backups"
+New-Item -ItemType Directory -Force $BackupDir | Out-Null
+$Backup = Join-Path $BackupDir ("incidents-" + (Get-Date -Format "yyyyMMdd-HHmmss") + ".json")
+Copy-Item -LiteralPath $Store -Destination $Backup -NoClobber
+$Data = Get-Content -LiteralPath $Backup -Raw | ConvertFrom-Json
+if ($Data.schemaVersion -ne 1 -or $Data.nextIncidentNumber -lt 1 -or $null -eq $Data.incidents) { throw "Backup schema is invalid" }
+foreach ($Incident in $Data.incidents) {
+    if ([string]::IsNullOrWhiteSpace($Incident.id) -or [string]::IsNullOrWhiteSpace($Incident.number) -or $Incident.version -lt 1 -or $null -eq $Incident.notes) { throw "Backup incident data is incomplete" }
+}
+```
+
+Bash/zsh:
+
+```bash
+store=./IncidentManagement.Api/Data/incidents.json
+backup_dir="$HOME/IncidentDesk-backups"
+mkdir -p "$backup_dir"
+chmod 700 "$backup_dir"
+backup="$backup_dir/incidents-$(date -u +%Y%m%dT%H%M%SZ)-$$.json"
+cp -p "$store" "$backup"
+chmod 600 "$backup"
+node -e 'const s=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")); if(s.schemaVersion!==1 || !Number.isInteger(s.nextIncidentNumber) || s.nextIncidentNumber<1 || !Array.isArray(s.incidents) || s.incidents.some(i=>typeof i.id!=="string" || typeof i.number!=="string" || !Number.isInteger(i.version) || !Array.isArray(i.notes))) throw Error("Backup schema is invalid"); console.log(`Valid schema; ${s.incidents.length} incident(s), next number ${s.nextIncidentNumber}`)' "$backup"
+```
+
+The validation commands parse the backup and check its top-level schema and incident identity/version/note fields. If validation fails, do not use that copy as a recovery source. Keep multiple dated backups when possible.
+
+If the store is corrupt or unreadable:
+
+1. Stop the API and confirm no other API process is using this store.
+2. Preserve the unreadable file unchanged in the protected backup location under a distinct name (for example, `incidents-corrupt-<timestamp>.json`). Do not delete it or overwrite it with an empty file.
+3. Validate a known-good backup as above. If you have no valid backup, keep the API stopped and retain the original for investigation; do not let the app create a new empty store over it.
+4. Copy the chosen backup to a temporary file beside the store, validate that copy, then replace the store. Only then restart the API. After restart, check `/api/incidents` for a successful read; `/api/health` alone is not sufficient.
+
+PowerShell restore (set `$Backup` to the validated backup and `$Store` to the actual default or override path):
+
+```powershell
+$Corrupt = Join-Path (Split-Path -Parent $Backup) ("incidents-corrupt-" + (Get-Date -Format 'yyyyMMdd-HHmmss') + "-" + [guid]::NewGuid().ToString('N') + ".json")
+Copy-Item -LiteralPath $Store -Destination $Corrupt -NoClobber
+$RestoreTemp = "$Store.restore-$([guid]::NewGuid().ToString('N'))"
+Copy-Item -LiteralPath $Backup -Destination $RestoreTemp
+$Restored = Get-Content -LiteralPath $RestoreTemp -Raw | ConvertFrom-Json
+if ($Restored.schemaVersion -ne 1 -or $Restored.nextIncidentNumber -lt 1 -or $null -eq $Restored.incidents) { throw "Backup schema is invalid; original store is unchanged" }
+foreach ($Incident in $Restored.incidents) {
+    if ([string]::IsNullOrWhiteSpace($Incident.id) -or [string]::IsNullOrWhiteSpace($Incident.number) -or $Incident.version -lt 1 -or $null -eq $Incident.notes) { throw "Backup incident data is incomplete; original store is unchanged" }
+}
+Move-Item -LiteralPath $RestoreTemp -Destination $Store -Force
+```
+
+Bash/zsh restore (set `store` and `backup` to the actual paths):
+
+```bash
+backup_dir="$(dirname "$backup")"
+corrupt="$backup_dir/incidents-corrupt-$(date -u +%Y%m%dT%H%M%SZ)-$$.json"
+cp -p "$store" "$corrupt"
+restore_temp="$store.restore.$$"
+cp -p "$backup" "$restore_temp"
+node -e 'const s=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")); if(s.schemaVersion!==1 || !Number.isInteger(s.nextIncidentNumber) || s.nextIncidentNumber<1 || !Array.isArray(s.incidents)) throw Error("Backup schema is invalid")' "$restore_temp" &&
+  mv -f "$restore_temp" "$store"
+```
+
+If validation fails, do not move the temporary file over the store. Keep both the original and the temporary/backup copies. The replacement commands are intended for local filesystems; retain the original until the restored store has been checked.
+
+#### Verify the procedure with a disposable fixture
+
+You can exercise the copy/validate/restore steps without touching real incidents. These examples create a temporary store with a fixed incident ID, note, version, and next-number value, back it up, simulate corruption, restore it, and compare the restored JSON exactly with the backup. They use only a temporary directory, never `IncidentManagement.Api/Data/incidents.json`.
+
+Bash/zsh:
+
+```bash
+fixture_dir="$(mktemp -d)"
+trap 'rm -rf "$fixture_dir"' EXIT
+node --input-type=module - "$fixture_dir" <<'NODE'
+import assert from 'node:assert/strict';
+import { copyFile, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+const dir = process.argv[2];
+const store = join(dir, 'fixture.json');
+const backup = join(dir, 'fixture-backup.json');
+const fixture = {
+  schemaVersion: 1,
+  nextIncidentNumber: 42,
+  incidents: [{
+    id: '11111111-1111-4111-8111-111111111111',
+    number: 'INC-00041',
+    version: 7,
+    notes: [{ id: '22222222-2222-4222-8222-222222222222', author: 'Fixture', text: 'Keep this note', createdAt: '2026-01-01T00:00:00Z' }],
+  }],
+};
+await writeFile(store, JSON.stringify(fixture, null, 2));
+await copyFile(store, backup);
+await writeFile(store, '{corrupt');
+await copyFile(backup, store);
+assert.deepEqual(JSON.parse(await readFile(store, 'utf8')), fixture);
+assert.deepEqual(JSON.parse(await readFile(store, 'utf8')), JSON.parse(await readFile(backup, 'utf8')));
+console.log('Fixture backup/restore passed: ID, note, version, and next number preserved.');
+NODE
+```
+
+PowerShell:
+
+```powershell
+$FixtureDir = Join-Path ([System.IO.Path]::GetTempPath()) ("incidentdesk-fixture-" + [guid]::NewGuid())
+New-Item -ItemType Directory $FixtureDir | Out-Null
+try {
+    @'
+{"schemaVersion":1,"nextIncidentNumber":42,"incidents":[{"id":"11111111-1111-4111-8111-111111111111","number":"INC-00041","version":7,"notes":[{"id":"22222222-2222-4222-8222-222222222222","author":"Fixture","text":"Keep this note","createdAt":"2026-01-01T00:00:00Z"}]}]}
+'@ | Set-Content -NoNewline -Path (Join-Path $FixtureDir "fixture.json")
+    $Store = Join-Path $FixtureDir "fixture.json"
+    $Backup = Join-Path $FixtureDir "fixture-backup.json"
+    Copy-Item $Store $Backup
+    Set-Content -NoNewline -Path $Store -Value "{corrupt"
+    Copy-Item -Force $Backup $Store
+    $Restored = Get-Content -Raw $Store | ConvertFrom-Json
+    if ($Restored.schemaVersion -ne 1 -or $Restored.nextIncidentNumber -ne 42 -or $Restored.incidents[0].id -ne "11111111-1111-4111-8111-111111111111" -or $Restored.incidents[0].number -ne "INC-00041" -or $Restored.incidents[0].version -ne 7 -or $Restored.incidents[0].notes[0].id -ne "22222222-2222-4222-8222-222222222222" -or $Restored.incidents[0].notes[0].text -ne "Keep this note") { throw "Fixture restore did not preserve the expected data" }
+    Write-Output "Fixture backup/restore passed: ID, note, version, and next number preserved."
+}
+finally {
+    Remove-Item -Recurse -Force $FixtureDir
+}
+```
+
+The fixture intentionally tests the file-copy recovery workflow, not API process recovery. It does not read or write the workspace store.
 
 ### Use a separate data file (optional)
 
@@ -178,10 +327,20 @@ $env:Storage__FilePath = "C:\path\to\incidents.json"
 dotnet run --project .\IncidentManagement.Api --launch-profile http
 ```
 
+```bash
+mkdir -p "$HOME/incidentdesk-data"
+export Storage__FilePath="$HOME/incidentdesk-data/incidents.json"
+dotnet run --project ./IncidentManagement.Api --launch-profile http
+```
+
 Choose a new, writable path to start with no incidents, or an existing compatible file to load its records. The override applies to processes started from that terminal. After stopping the API, remove it before restarting with the default workspace store:
 
 ```powershell
 Remove-Item Env:\Storage__FilePath
+```
+
+```bash
+unset Storage__FilePath
 ```
 
 ### How saving works
@@ -253,18 +412,24 @@ Successful reads, updates, and note additions return **200 OK**. Creation return
 
 Run these commands from the project root after installing the prerequisites and frontend dependencies. A **build** checks and prepares the code to run; **tests** automatically check expected behavior.
 
-Build the backend first; the API tests run the resulting compiled application:
+Build the backend:
 
 ```powershell
 dotnet build .\IncidentManagement.sln
 ```
 
-If the build succeeds, run the API and frontend tests:
+```bash
+dotnet build ./IncidentManagement.sln
+```
+
+Run the Node.js tests present in `tests/`:
 
 ```powershell
-node --test .\tests\api.test.mjs
-node --test .\tests\incidentCsv.test.mjs .\tests\incidentModel.test.mjs .\tests\incidentService.test.mjs .\tests\theme.test.mjs
-node --test .\tests\about.test.mjs
+node --test .\tests\about.test.mjs .\tests\incidentModel.test.mjs
+```
+
+```bash
+node --test ./tests/about.test.mjs ./tests/incidentModel.test.mjs
 ```
 
 Build the frontend into `client\dist`:
@@ -273,9 +438,11 @@ Build the frontend into `client\dist`:
 npm --prefix .\client run build
 ```
 
-The integration suite starts its own API on an ephemeral localhost port with an isolated temporary file under `tests\.tmp`. It verifies CRUD, validation, concurrent writes, stale versions, notes, restart persistence, monotonic numbers, and corruption handling. It stops its API and removes its test data afterward, without modifying the workspace's actual incidents.
+```bash
+npm --prefix ./client run build
+```
 
-The frontend suites run without starting the API: CSV tests cover column order, UTC timestamps, empty optional values, row ordering, escaping, spreadsheet-formula protection, and empty exports; model tests check UI defaults, labels, and constants; service tests use mocked `fetch` to check the API client; theme tests check the light/dark palettes and color contrast.
+The tracked Node.js tests cover the About page and incident-model behavior. They do not start an API or access the workspace store.
 
 ## Serve the built UI from .NET (optional)
 
@@ -286,6 +453,13 @@ npm --prefix .\client run build
 New-Item -ItemType Directory -Force .\IncidentManagement.Api\wwwroot
 Copy-Item .\client\dist\* .\IncidentManagement.Api\wwwroot -Recurse -Force
 dotnet run --project .\IncidentManagement.Api --launch-profile http
+```
+
+```bash
+npm --prefix ./client run build
+mkdir -p ./IncidentManagement.Api/wwwroot
+cp -R ./client/dist/. ./IncidentManagement.Api/wwwroot/
+dotnet run --project ./IncidentManagement.Api --launch-profile http
 ```
 
 Then open **http://localhost:5051**. Rebuild and recopy the assets after frontend changes. For development, use the Vite server instead.
